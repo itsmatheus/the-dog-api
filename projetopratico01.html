@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto Prático #01</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Jacquard+12&family=Jersey+10&display=swap');
+
+        :root {
+            --text-main: #52486a;
+            --text-sub: #645880;
+            --sunset-1: #8174A0;
+            --sunset-2: #A888B5;
+            --sunset-3: #EFB6C8;
+            --sunset-4: #FFD2A0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Jersey 10", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 24px;
+            margin: 0;
+
+            background-color: var(--sunset-4);
+        }
+
+        .jacquard {
+            font-family: "Jacquard 12", system-ui;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .shadow {
+            text-shadow: 0px -2px 0px black,
+                        0px -1px 0px black,
+                        0px 1px 0px black,
+                        0px 2px 0px black,
+                        0px 3px 0px black,
+                        0px 4px 0px black,
+                        1px -2px 0px black,
+                        1px -1px 0px black,
+                        1px 1px 0px black,
+                        1px 2px 0px black,
+                        1px 3px 0px black,
+                        1px 4px 0px black,
+                        -1px -2px 0px black,
+                        -1px -1px 0px black,
+                        -1px 1px 0px black,
+                        -1px 2px 0px black,
+                        -1px 3px 0px black,
+                        -1px 4px 0px black;
+        }
+
+        header {
+            position: relative;
+            text-align: center;
+            padding: 2.5em;
+            height: 50vh;
+            background: linear-gradient(0deg, var(--sunset-4) 0%, var(--sunset-3) 35%, var(--sunset-2) 100%);
+            background-repeat: no-repeat;
+
+            .fade {
+                pointer-events: none;
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                z-index: 999;
+                background: linear-gradient(0deg, var(--sunset-4) 0%, var(--sunset-3) 35%, transparent 60%, transparent 100%);
+            }
+            h1 {
+                font-size: 3.5rem;
+                color: var(--text-main);
+                margin: 0;
+            }
+            sub {
+                font-size: 1.5rem;
+                color: var(--text-sub);
+            }
+            div {
+                position: sticky;
+                top: .5em;
+            }
+        }
+
+        main {
+            text-align: center;
+
+            
+            button, select {
+                font-family: "Jersey 10", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+                font-size: 1.25rem;
+                background-color: transparent;
+                color: var(--text-main);
+                border: 3px solid var(--text-main);
+                padding: .25em 1em;
+                transition: .25s;
+                outline: none;
+                appearance: none;
+                border-radius: 0;
+            }
+            button:disabled, select:disabled {
+                opacity: .75;
+                cursor: not-allowed;
+            }
+            button:hover:not(:disabled) {
+                cursor: pointer;
+                color: var(--sunset-4);
+                background-color: var(--text-main);
+                box-shadow: 5px 5px 0px black;
+                transform: translateY(-5px) translateX(-5px);
+            }
+            select:hover:not(:disabled) {
+                cursor: pointer;
+                color: var(--sunset-4);
+                background-color: var(--text-main);
+                box-shadow: 5px 5px 0px black;
+                transform: translateY(-5px) translateX(-5px);
+            }
+            
+            .button-box {
+                display: flex;
+                flex-flow: row wrap;
+                justify-content: center;
+                gap: .25em;
+                margin: 1em auto;
+                width: 55vw;
+                
+                button {
+                    flex-grow: 1;
+                }
+                
+                select {
+                    flex-grow: 8;
+                }
+            }
+
+            #results {
+                display: flex;
+                flex-flow: row wrap;
+                justify-content: space-between;
+                width: 55vw;
+                margin: 1em auto 3em auto;
+                gap: .25em;
+                transition: .25s;
+
+                #placeholder {
+                    width: 100%;
+                }
+                
+                #dogDiv {
+                    width: 29%;
+                    transition: .25s;
+                    border: 3px solid var(--text-main);
+                    padding: .25em;
+
+                    #dogImage {
+                        display: inline-block;
+                        width: 100%;
+                        height: auto;
+                        transition: .25s;
+                        aspect-ratio: 1 / 1;
+                        object-fit: cover;
+                    }
+                    #dogName {
+                        font-size: 1.5rem;
+                        color: var(--text-main);
+                        margin: 0 0 .5em 0;
+                        transition: .25s;
+                    }
+                    #dogInfo {
+                        margin: 0;
+                        font-size: .75em;
+                        white-space: pre;
+                        text-wrap: wrap;
+                    }
+                }
+                #dogDiv:hover {
+                    cursor: pointer;
+                    background-color: var(--text-main);
+                    box-shadow: 5px 5px 0px black;
+                    transform: translateY(-5px) translateX(-5px);
+                }
+                #dogDiv:hover #dogName {
+                    text-decoration: underline;
+                    text-decoration-color: var(--text-sub);
+                    color: var(--sunset-4);
+                }
+            }
+
+            #modal {
+                position: fixed;
+                top: 0; bottom: 0;
+                left: 0; right: 0;
+                /* display: flex; */
+                display: none;
+                justify-content: center;
+                align-items: center;
+                background-color: rgba(0,0,0,.5);
+                backdrop-filter: blur(3px);
+                transition: .25s;
+                z-index: 999;
+
+                #box {
+                    width: 90vw;
+                    height: fit-content;
+                    max-width: 600px;
+                    border: 3px solid var(--text-main);
+                    transform: translate;
+                    background-color: var(--sunset-4);
+                    transition: .25s;
+
+                    img {
+                        width: 70%;
+                        max-height: 50vh;
+                        margin: 1em auto;
+                        border: 3px solid var(--text-main);
+                    }
+                    h2 {
+                        font-size: 1.25em;
+                        text-decoration: underline;
+                        text-decoration-color:var(--text-main);
+                    }
+                    button {
+                        margin: 1.5em;
+                    }
+                }
+                #box:hover {
+                    box-shadow: 5px 5px 0px black;
+                    transform: translateY(-5px) translateX(-5px);
+                }
+            }
+        }
+        footer {
+            margin-top: 5em;
+            text-align: center;
+            padding: .5em;
+
+            p {
+                color: var(--text-main);
+                font-size: 1.25rem;
+                margin: 0;
+            }
+        }
+
+        @media only screen and (max-width: 1000px) {
+            main #results, main .button-box {
+                width: 75vw;
+            }
+            main #results #dogDiv {
+                width: 45%;
+            }
+
+            main #results #dogDiv #dogName {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media only screen and (max-width: 600px) {
+            main .button-box button, main .button-box select, main #results {
+                min-width: 95vw;
+                flex-grow: 1;
+            }
+            main #results #dogDiv #dogImage {
+                width: 100%;
+            }
+            main #results #dogDiv {
+                display: flex;
+                flex-flow: column wrap;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <h1 class="jacquard shadow">Projeto Prático #01</h1>
+            <sub class="shadow">The Dog API</sub>
+        </div>
+        <div class="fade"></div>
+    </header>
+    <main>
+        <div class="button-box">
+            <select id="dogBreeds">
+            </select>
+            <button id="gerador" onclick="gerarImagens()">Search</button>
+        </div>
+        <div id="results">
+            <p id="placeholder">Select a breed group above and click "Search".<br>Then click a breed to learn more.</p>
+        </div>
+        <div id="modal">
+            <div id="box">
+                <img>
+                <h2>Australian Cattle Dog</h2>
+                <p>Height: 43 - 51 cm<br>Purpose: Cattle herding, herding trials<br>Life span: 12 - 14 years<br>Origin: undefined</p>
+                <p>Cautious, Energetic, Loyal, Obedient, Protective, Brave</p>
+                <button onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>Por Matheus Coelho Mangolim<br>RA 205429-25</p>
+    </footer>
+    <script>
+        async function carregarRacas() {
+
+            // puxa dados de acordo com a pesquisa da url
+            const url = `https://api.thedogapi.com/v1/breeds`;
+            const fetchDogsList = await fetch(url); 
+            const breedList = await fetchDogsList.json();
+
+            console.log(breedList);
+
+            // 
+            const select = document.getElementById("dogBreeds");
+            const breedGroups = []
+            for (i = 0; i < breedList.length; i++) {
+                // se dado de grupo não for nulo
+                if (breedList[i].breed_group != undefined && breedList[i].breed_group != '') {
+                    // adiciona grupo à tabela
+                    breedGroups.push(breedList[i].breed_group);
+                } else {
+                    breedGroups.push("Others (unclassified)");
+                }
+            }
+            const uniqueBreeds = breedGroups.filter((v,i,s) => s.indexOf(v) === i);
+            console.log(uniqueBreeds);
+
+            for (i = 0; i < uniqueBreeds.sort().length; i++) {
+                const option = document.createElement("option");
+                option.value = i;
+                option.textContent = uniqueBreeds[i];
+                select.appendChild(option);
+            }
+        }
+
+        carregarRacas();
+
+        async function gerarImagens() {
+            // desativa botão temporariamente para evitar duplicatas
+            document.getElementById("gerador").disabled = true;
+            document.getElementById("dogBreeds").disabled = true;
+
+            // limpa a div
+            const res = document.getElementById("results");
+            while (res.firstChild) {
+                res.removeChild(res.firstChild);
+            }
+
+            // puxa dados de acordo com a pesquisa da url
+            const url = `https://api.thedogapi.com/v1/breeds`
+            const fetchDogsList = await fetch(url);
+            const dogsList = await fetchDogsList.json();
+
+            // verifica qual a raça escolhida
+            const selector = document.getElementById("dogBreeds");
+            const selected = selector.options[selector.selectedIndex].text;
+            
+            for (i = 0; i < dogsList.length; i++) {
+                const breedGroup = dogsList[i].breed_group;
+
+                if (selected == breedGroup) {
+                    // extrai json de dados da imagem baseado na ID
+                    const imageId = dogsList[i].reference_image_id;
+                    const imageUrl = `https://api.thedogapi.com/v1/images/${imageId}`;
+                    const fetchImageData = await fetch(imageUrl);
+                    const imageData = await fetchImageData.json();
+
+                    createElements(i, dogsList[i].name, dogsList[i].height.metric, dogsList[i].bred_for, dogsList[i].life_span, dogsList[i].origin, dogsList[i].temperament, `${imageData.url}`);
+                } if (selected == "Others (unclassified)") {
+                    if (breedGroup == '' || breedGroup == undefined) {
+                        // extrai json de dados da imagem baseado na ID
+                        const imageId = dogsList[i].reference_image_id;
+                        const imageUrl = `https://api.thedogapi.com/v1/images/${imageId}`;
+                        const fetchImageData = await fetch(imageUrl);
+                        const imageData = await fetchImageData.json();
+
+                        createElements(i, dogsList[i].name, dogsList[i].height.metric, dogsList[i].bred_for, dogsList[i].life_span, dogsList[i].origin, dogsList[i].temperament, `${imageData.url}`);
+                    }
+                }
+            }
+            // ativa botão novamente
+            document.getElementById("gerador").disabled = false;
+            document.getElementById("dogBreeds").disabled = false;
+        }
+
+        function createElements(id, name, height, purpose, life_span, origin, temperament, imageUrl) {
+                    // cria uma div
+                    const div = document.createElement("div");
+                    div.setAttribute("id","dogDiv");
+                    // div.setAttribute("onclick","openModal(" + i + ", " + imageId + ")");
+                    // div.setAttribute("onclick",`openModal('${i}, "${imageData.url}")`);
+                    div.setAttribute("onclick",`openModal(${id}, "${name}", "${height}", "${purpose}", "${life_span}", "${origin}", "${temperament}", "${imageUrl}")`);
+                    document.getElementById("results").appendChild(div);
+
+                    // cria elemento da imagem
+                    const image = document.createElement("img");
+                    image.setAttribute("id","dogImage");
+                    image.src = imageUrl;
+                    div.appendChild(image);
+
+                    // cria texto do nome abaixo da imagem
+                    const dogName = document.createElement("p");
+                    const textName = document.createTextNode(name);
+                    dogName.setAttribute("id","dogName");
+                    dogName.appendChild(textName);
+                    div.appendChild(dogName);
+
+                    // cria texto oculto da id abaixo do nome
+                    const dogPurpose = document.createElement("span");
+                    const textPurpose = document.createTextNode(i);
+                    dogPurpose.setAttribute("id","dogInfo");
+                    dogPurpose.style.display = "none";
+                    dogPurpose.appendChild(textPurpose);
+                    div.appendChild(dogPurpose);
+        }
+
+        function openModal(id, name, height, purpose, life_span, origin, temperament, imageUrl) {
+            console.log("Open modal for ID: " + id);
+
+            const modal = document.getElementById("modal");
+            modal.style.display = "flex";
+
+            const box = document.getElementById("box");
+            console.log(box.childNodes);
+            box.childNodes[1].src = imageUrl;
+            box.childNodes[3].innerHTML = name;
+            box.childNodes[5].innerHTML = `${purpose}<br>Height: ${height} cm<br>Life span: ${life_span}<br>Origin: ${origin}`;
+            box.childNodes[7].innerHTML = `${temperament}`;
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("modal");
+            modal.style.display = "none";
+            console.log("Close modal");
+        }
+    </script>
+</body>
+</html>
